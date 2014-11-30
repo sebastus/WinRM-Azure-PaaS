@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="EnableWinRM" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
+  <WebRole name="WebRole1" vmsize="Small">
+    <Startup>
+      <Task commandLine="EnableWinRM.cmd" executionContext="elevated" taskType="simple" />
+    </Startup>
+    <Sites>
+      <Site name="Web">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="Endpoint1" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Endpoints>
+      <InputEndpoint name="Endpoint1" protocol="http" port="80" />
+      <InstanceInputEndpoint name="WinRM" localPort="5986" protocol="tcp">
+        <AllocatePublicPortFrom>
+          <FixedPortRange min="30000" max="30100"/>
+        </AllocatePublicPortFrom>
+      </InstanceInputEndpoint>
+    </Endpoints>
+    <Imports>
+      <Import moduleName="Diagnostics" />
+      <Import moduleName="RemoteAccess" />
+      <Import moduleName="RemoteForwarder" />
+    </Imports>
+    <Certificates>
+      <Certificate name="SSL" storeLocation="LocalMachine" storeName="My" />
+    </Certificates>
+  </WebRole>
+</ServiceDefinition>
